@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Iniciar sesión</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="loginForm">
+    <!-- Usuario -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput formControlName="usuario" type="email" />
+      <mat-error *ngIf="usuario?.hasError('required')">
+        El correo es obligatorio
+      </mat-error>
+      <mat-error *ngIf="usuario?.hasError('email')">
+        Ingresa un correo válido
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Contraseña -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Contraseña</mat-label>
+      <input matInput formControlName="password" type="password" />
+      <mat-error *ngIf="password?.hasError('required')">
+        La contraseña es obligatoria
+      </mat-error>
+      <mat-error *ngIf="password?.hasError('minlength')">
+        Mínimo 8 caracteres
+      </mat-error>
+      <mat-error *ngIf="password?.hasError('maxlength')">
+        Máximo 10 caracteres
+      </mat-error>
+      <mat-error *ngIf="password?.hasError('pattern')">
+        Debe incluir al menos una mayúscula, un número y un símbolo especial
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="login()">Entrar</button>
+</mat-dialog-actions>

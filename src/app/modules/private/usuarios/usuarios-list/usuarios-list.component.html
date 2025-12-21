@@ -1,0 +1,40 @@
+<div class="header">
+  <h2>Listado de Asesores</h2>
+  <button mat-raised-button color="primary" (click)="nuevo()">
+    + Nuevo Asesor
+  </button>
+</div>
+
+<mat-card *ngIf="loading">
+  <p>Cargando asesores...</p>
+</mat-card>
+
+<table mat-table [dataSource]="usuarios" *ngIf="!loading">
+
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+    <td mat-cell *matCellDef="let u"> {{u.Nombres}} {{u.Paterno}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="correo">
+    <th mat-header-cell *matHeaderCellDef> Correo </th>
+    <td mat-cell *matCellDef="let u"> {{u.Correo}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="telefono">
+    <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+    <td mat-cell *matCellDef="let u"> {{u.Telefono}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+    <td mat-cell *matCellDef="let u">
+      <button mat-button color="accent" (click)="editar(u.idPersona)">
+        Editar
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['nombre','correo','telefono','acciones']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['nombre','correo','telefono','acciones'];"></tr>
+</table>

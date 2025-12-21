@@ -1,0 +1,68 @@
+.row-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+
+  /* 🔹 NUEVO: sombra + fondo + bordes redondeados */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+}
+
+
+.carousel {
+  position: relative;
+  width: 500px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f4f4f4; /* fondo por si tarda la imagen */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.carousel img.active {
+  opacity: 1;
+}
+
+/* 🔹 Controles debajo */
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+}
+
+.carousel-index {
+  font-weight: 500;
+  color: #555;
+}
+
+.features {
+  flex: 1;
+  min-width: 220px;
+}
+
+.features h3 {
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.features ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}

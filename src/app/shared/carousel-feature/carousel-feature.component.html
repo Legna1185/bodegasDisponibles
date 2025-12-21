@@ -1,0 +1,29 @@
+<div class="row-content">
+    <div>
+  <div
+    class="carousel"
+    (mouseenter)="pause()"
+    (mouseleave)="resume()"
+  >
+    <img
+      *ngFor="let img of images; let i = index"
+      [src]="img"
+      [class.active]="i === currentIndex"
+      alt="Imagen del carrusel"
+    />
+  </div>
+
+  <!-- 🔹 Controles debajo -->
+  <div class="carousel-controls">
+    <button mat-icon-button color="primary" (click)="prevSlide()">❮</button>
+    <span class="carousel-index">{{ currentIndex + 1 }} / {{ images.length }}</span>
+    <button mat-icon-button color="primary" (click)="nextSlide()">❯</button>
+  </div>
+</div>
+  <div class="features">
+    <h3>{{ title }}</h3>
+    <ul>
+      <li *ngFor="let feature of features">{{ feature }}</li>
+    </ul>
+  </div>
+</div>

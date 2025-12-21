@@ -1,0 +1,31 @@
+.app-title {
+  font-weight: bold;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+}
+
+.btn-yellow {
+  background-color: #ffeb3b;
+  color: #000;
+  border: 1px solid #fbc02d;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-yellow:hover {
+  background-color: #fdd835;
+}
+
+.header-black {
+  background: linear-gradient(90deg, #000000, #1a1a1a);
+  color: white;
+}

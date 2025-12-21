@@ -1,0 +1,21 @@
+<div class="admin-container">
+
+  <!-- MENU LATERAL -->
+  <aside class="sidebar">
+    <h3>Administrador</h3>
+
+    <button mat-button class="menu-btn" routerLink="usuarios" routerLinkActive="active">
+      👤 Usuarios
+    </button>
+
+    <button mat-button class="menu-btn" routerLink="propiedades" routerLinkActive="active">
+      🏢 Propiedades
+    </button>
+  </aside>
+
+  <!-- CONTENIDO DINÁMICO -->
+  <section class="content">
+    <router-outlet></router-outlet>
+  </section>
+
+</div>

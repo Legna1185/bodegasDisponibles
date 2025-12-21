@@ -1,0 +1,25 @@
+<mat-toolbar class="header-black">
+  <span class="app-title">Bodegas Disponibles</span>
+
+  <span class="spacer"></span>
+
+  <ng-container *ngIf="!usuario; else usuarioLogueado">
+    <button
+      mat-stroked-button
+      class="btn-yellow"
+      (click)="openLoginDialog()"
+    >
+      Iniciar sesión
+    </button>
+  </ng-container>
+
+  <ng-template #usuarioLogueado>
+    <div class="user-info">
+      <mat-icon>person</mat-icon>
+      <span>{{ usuario }}</span>
+      <button mat-icon-button (click)="logout()" title="Cerrar sesión">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </ng-template>
+</mat-toolbar>

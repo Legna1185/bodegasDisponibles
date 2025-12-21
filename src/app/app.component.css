@@ -1,0 +1,24 @@
+.main-container {
+  width: 80%;
+  max-width: 1200px; /* opcional: límite máximo */
+  margin: 0 auto; /* centra horizontalmente */
+  display: block;
+}
+
+
+
+.floating-logo {
+  position: fixed; /* <- permanece visible al hacer scroll */
+  right: 20px;
+  bottom: 20px; /* puedes usar top: 20px; si lo prefieres arriba */
+  height: 60px;
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.floating-logo:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}

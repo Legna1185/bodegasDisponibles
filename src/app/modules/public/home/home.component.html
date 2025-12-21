@@ -1,0 +1,82 @@
+<h1>Bienvenido a BodegasDisponibles</h1>
+<p>Explora nuestras bodegas destacadas.</p>
+
+
+<div class="home-container">
+  <div class="filters">
+    <mat-accordion>
+  <mat-expansion-panel *ngFor="let filtro of filtros">
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ filtro.Title }}</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ul class="filter-list" [ngSwitch]="filtro.Tipo">
+      <!-- 🔹 Tipo radio -->
+      <ng-container *ngSwitchCase="'radio'">
+        <li *ngFor="let item of filtro.Items">
+          <input
+            type="radio"
+            [name]="filtro.Title"
+            [value]="item.value"
+            (change)="onFilterChange(filtro, item.value, $event)"
+          />
+          {{ item.value }}
+        </li>
+      </ng-container>
+
+      <!-- 🔹 Tipo checkbox -->
+      <ng-container *ngSwitchCase="'checkbox'">
+        <li *ngFor="let item of filtro.Items">
+          <input
+            type="checkbox"
+            [value]="item.value"
+            (change)="onFilterChange(filtro, item.value, $event)"
+          />
+          {{ item.value }}
+        </li>
+      </ng-container>
+    </ul>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<!-- 🔹 Botón para ver el JSON construido -->
+<button mat-raised-button color="primary" (click)="mostrar = !mostrar">
+  Mostrar JSON
+</button>
+
+<pre *ngIf="mostrar">
+{{ getFiltrosSeleccionadosJSON() }}
+</pre>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="filter-button btn-green"
+      (click)="applyFilters()"
+    >
+      Aplicar filtros
+    </button>
+  </div>
+   <div class="content">
+    <app-carousel-feature
+      [title]="'Bodega Norte'"
+      [images]="[
+        'https://picsum.photos/500/300?random=1',
+        'https://picsum.photos/500/300?random=2',
+        'https://picsum.photos/500/300?random=3'
+      ]"
+      [features]="['Ubicación céntrica', '1,200 m²', 'Seguridad 24h']">
+    </app-carousel-feature>
+
+    <app-carousel-feature
+      [title]="'Bodega Sur'"
+      [images]="[
+        'https://picsum.photos/500/300?random=4',
+        'https://picsum.photos/500/300?random=5',
+        'https://picsum.photos/500/300?random=6'
+      ]"
+      [features]="['Área de carga techada', 'Fácil acceso', 'Estacionamiento amplio']">
+    </app-carousel-feature>
+  </div>
+
+</div>
