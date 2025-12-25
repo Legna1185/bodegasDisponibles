@@ -1,49 +1,76 @@
 <div class="form-container">
 
-  <h2 *ngIf="modo === 'asesor'">Registrar Asesor</h2>
-  <h2 *ngIf="modo === 'cliente'">Registrar Cliente</h2>
+  <!-- Título dinámico -->
+  <h2 *ngIf="!idPersona && modo === 'asesor'">Registrar Asesor</h2>
+  <h2 *ngIf="!idPersona && modo === 'cliente'">Registrar Cliente</h2>
+  <h2 *ngIf="idPersona">Editar {{ modo === 'asesor' ? 'Asesor' : 'Cliente' }}</h2>
 
   <form [formGroup]="personaForm" (ngSubmit)="enviar()">
 
+    <!-- Nombres -->
     <mat-form-field appearance="fill" class="full">
       <mat-label>Nombres</mat-label>
-      <input matInput formControlName="Nombres">
-      <mat-error *ngIf="personaForm.get('Nombres')?.hasError('required')">
+      <input matInput formControlName="nombres">
+      <mat-error *ngIf="personaForm.get('nombres')?.hasError('required')">
         Campo obligatorio
       </mat-error>
     </mat-form-field>
 
+    <!-- Apellido paterno -->
     <mat-form-field appearance="fill" class="full">
       <mat-label>Apellido Paterno</mat-label>
-      <input matInput formControlName="Paterno">
-      <mat-error *ngIf="personaForm.get('Paterno')?.hasError('required')">
+      <input matInput formControlName="paterno">
+      <mat-error *ngIf="personaForm.get('paterno')?.hasError('required')">
         Campo obligatorio
       </mat-error>
     </mat-form-field>
 
+    <!-- Apellido materno -->
     <mat-form-field appearance="fill" class="full">
       <mat-label>Apellido Materno</mat-label>
-      <input matInput formControlName="Materno">
+      <input matInput formControlName="materno">
     </mat-form-field>
 
+    <!-- Correo -->
     <mat-form-field appearance="fill" class="full">
       <mat-label>Correo</mat-label>
-      <input matInput type="email" formControlName="Correo">
-      <mat-error *ngIf="personaForm.get('Correo')?.hasError('email')">
+      <input matInput type="email" formControlName="correo">
+      <mat-error *ngIf="personaForm.get('correo')?.hasError('email')">
         Correo inválido
+      </mat-error>
+      <mat-error *ngIf="personaForm.get('correo')?.hasError('required')">
+        Campo obligatorio
       </mat-error>
     </mat-form-field>
 
+    <!-- Teléfono -->
     <mat-form-field appearance="fill" class="full">
       <mat-label>Teléfono</mat-label>
-      <input matInput formControlName="Telefono">
+      <input matInput formControlName="telefono">
+      <mat-error *ngIf="personaForm.get('telefono')?.hasError('required')">
+        Campo obligatorio
+      </mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" class="full" [disabled]="loading">
-      <span *ngIf="!loading">Registrar</span>
-      <mat-spinner *ngIf="loading" diameter="22"></mat-spinner>
+    <!-- Botón -->
+    <button
+      mat-raised-button
+      color="primary"
+      class="full"
+      type="submit"
+      [disabled]="loading || personaForm.invalid">
+
+      <span *ngIf="!loading">
+        {{ idPersona ? 'Actualizar' : 'Registrar' }}
+      </span>
+
+      <mat-spinner
+        *ngIf="loading"
+        diameter="22">
+      </mat-spinner>
     </button>
 
+    <!-- Mensajes -->
     <div class="mensaje" *ngIf="mensaje">{{ mensaje }}</div>
     <div class="error" *ngIf="error">{{ error }}</div>
 

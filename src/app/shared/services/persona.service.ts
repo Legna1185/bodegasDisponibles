@@ -32,7 +32,7 @@ export class PersonaService {
   // =========================
   getPersonas(): Observable<PersonaModel[]> {
     return this.http.get<PersonaModel[]>(
-      '/persona/listar',
+      '/persona',
       undefined,
       this.getAuthHeaders()
     );
@@ -76,7 +76,7 @@ export class PersonaService {
   // =========================
   deletePersona(id: number): Observable<any> {
     return this.http.delete<any>(
-      `persona/eliminar/${id}`,
+      `/persona/${id}`,
       undefined,
       this.getAuthHeaders()
     );

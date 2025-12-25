@@ -1,18 +1,30 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { PersonaService } from '../../../shared/services/persona.service';
 import { PersonaModel } from '../../../shared/models/persona.model';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertDialogComponent } from '../../../shared/dialogs/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-persona-form',
   templateUrl: './persona-form.component.html',
   styleUrls: ['./persona-form.component.css']
 })
-export class PersonaFormComponent implements OnInit {
+export class PersonaFormComponent implements OnChanges {
 
   @Input() modo: 'asesor' | 'cliente' = 'cliente';
   @Input() idPersona: number | null = null;
+
+  // 🔔 Evento para avisar al padre
+  @Output() guardado = new EventEmitter<void>();
 
   personaForm!: FormGroup;
   loading = false;
@@ -22,37 +34,49 @@ export class PersonaFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private personaService: PersonaService
-  ) {}
+    private personaService: PersonaService,
+    private dialog: MatDialog
+  ) {
+    this.crearFormulario();
+  }
 
-  ngOnInit(): void {
-    this.personaForm = this.fb.group({
-      Nombres: ['', Validators.required],
-      Paterno: ['', Validators.required],
-      Materno: [''],
-      Correo: ['', [Validators.required, Validators.email]],
-      Telefono: ['', Validators.required]
-    });
-
-    // Si hay id, cargar para edición
-    if (this.idPersona) {
-      this.cargarPersona();
+  // ============================================
+  // 🔄 Detecta cambios en el ID (edición)
+  // ============================================
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['idPersona'] && this.idPersona) {
+      this.cargarPersona(this.idPersona);
     }
   }
 
   // ============================================
-  // 🔹 Cargar persona (modo edición)
+  // 🧱 Crear formulario (camelCase)
   // ============================================
-  cargarPersona() {
-    this.loading = true;
+  private crearFormulario(): void {
+    this.personaForm = this.fb.group({
+      nombres: ['', Validators.required],
+      paterno: ['', Validators.required],
+      materno: [''],
+      correo: ['', [Validators.required, Validators.email]],
+      telefono: ['', Validators.required],
+      idTipoPersona: [1]
+    });
+  }
 
-    this.personaService.getPersonaById(this.idPersona!).subscribe({
+  // ============================================
+  // 📥 Cargar persona por ID
+  // ============================================
+  private cargarPersona(id: number): void {
+    this.loading = true;
+    this.error = '';
+    this.mensaje = '';
+
+    this.personaService.getPersonaById(id).subscribe({
       next: (res: PersonaModel) => {
         this.personaForm.patchValue(res);
         this.loading = false;
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.error = 'No se pudo cargar la información';
         this.loading = false;
       }
@@ -60,70 +84,93 @@ export class PersonaFormComponent implements OnInit {
   }
 
   // ============================================
-  // 🔹 Guardar (Crear o Editar Persona)
+  // 💾 Guardar (crear o editar)
   // ============================================
-  enviar() {
-    if (this.personaForm.invalid) {
-      this.personaForm.markAllAsTouched();
-      return;
-    }
+  enviar(): void {
+  if (this.personaForm.invalid) {
+    this.personaForm.markAllAsTouched();
+    return;
+  }
 
+  this.error = '';
+  this.mensaje = '';
+
+  const user = this.auth.getUser();
+
+  const payload: PersonaModel = {
+    ...this.personaForm.value,
+    idTipoPersona: user?.rol === 'Administrador' ? 1 : 2
+  };
+
+  // ✏️ EDICIÓN → CONFIRMAR
+  if (this.idPersona) {
+    this.confirmarActualizacion(payload);
+  }
+  // ➕ CREACIÓN → DIRECTO
+  else {
     this.loading = true;
-    this.error = '';
-    this.mensaje = '';
+    this.crearPersona(payload);
+  }
+}
 
-    const user = this.auth.getUser();
 
-    const payload: PersonaModel = {
-      ...this.personaForm.value,
-      TipoPersona: user?.rol === 'Administrador' ? 1 : 2
-    };
+  // ============================================
+  // ✏️ Actualizar
+  // ============================================
+  private actualizarPersona(data: PersonaModel): void {
+  this.loading = true;
 
-    // Si hay ID → editar
-    if (this.idPersona) {
-      this.editarPersona(payload);
-    } 
-    // Si no hay ID → nuevo registro
-    else {
-      this.crearPersona(payload);
+  this.personaService.updatePersona(data).subscribe({
+    next: () => {
+      this.mensaje = 'Actualizado correctamente';
+      this.loading = false;
+      this.guardado.emit();
+    },
+    error: () => {
+      this.error = 'Error al actualizar';
+      this.loading = false;
     }
-  }
+  });
+}
+
 
   // ============================================
-  // ✏️ EDITAR
+  // ➕ Crear
   // ============================================
-  private editarPersona(payload: PersonaModel) {
-    const data: PersonaModel = {
-      ...payload,
-      idPersona: this.idPersona!
-    };
-
-    this.personaService.updatePersona(data).subscribe({
+  private crearPersona(data: PersonaModel): void {
+    this.personaService.createPersona(data).subscribe({
       next: () => {
-        this.loading = false;
-        this.mensaje = 'Actualizado correctamente';
-      },
-      error: () => {
-        this.loading = false;
-        this.error = 'Error al actualizar';
-      }
-    });
-  }
-
-  // ============================================
-  // ➕ CREAR
-  // ============================================
-  private crearPersona(payload: PersonaModel) {
-    this.personaService.createPersona(payload).subscribe({
-      next: () => {
-        this.loading = false;
         this.mensaje = 'Registrado correctamente';
-        this.personaForm.reset();
+        this.loading = false;
+        this.guardado.emit(); // 🚀 redirigir
       },
       error: () => {
-        this.loading = false;
         this.error = 'Error al registrar';
+        this.loading = false;
       }
     });
   }
+
+  private confirmarActualizacion(payload: PersonaModel): void {
+  const dialogRef = this.dialog.open(AlertDialogComponent, {
+    width: '400px',
+    data: {
+      title: 'Confirmar cambios',
+      message: '¿Desea continuar con los cambios realizados?',
+      confirmText: 'Sí',
+      cancelText: 'No'
+    }
+  });
+
+  dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+    if (confirmado) {
+      this.actualizarPersona({
+        ...payload,
+        idPersona: this.idPersona!
+      });
+    }
+    // ❌ Si es false → no hacemos nada
+  });
+}
+
 }

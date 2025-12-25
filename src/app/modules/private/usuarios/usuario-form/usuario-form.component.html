@@ -1,4 +1,8 @@
 <h2 *ngIf="!idPersona">Registrar Asesor</h2>
 <h2 *ngIf="idPersona">Editar Asesor</h2>
 
-<app-persona-form modo="asesor" [idPersona]="idPersona"></app-persona-form>
+<app-persona-form
+  modo="asesor"
+  [idPersona]="idPersona"
+  (guardado)="onGuardado()">
+</app-persona-form>
