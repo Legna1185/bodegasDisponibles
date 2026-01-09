@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Administrar imágenes</h2>
+
+<mat-dialog-content>
+
+  <p>Puedes subir hasta 5 imágenes</p>
+
+  <input type="file" accept="image/*" multiple (change)="onImagesSelected($event)">
+
+  <div class="preview-grid">
+    <div class="preview" *ngFor="let img of imagenes; let i = index">
+      <img [src]="img">
+      <button mat-icon-button color="warn" (click)="eliminarImagen(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">
+    Guardar
+  </button>
+</mat-dialog-actions>

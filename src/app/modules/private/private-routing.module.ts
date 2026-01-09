@@ -17,6 +17,7 @@ import { BodegasListComponent } from './bodegas/bodegas-list/bodegas-list.compon
 
 // Redirección de rol
 import { RoleRedirectComponent } from './role-redirect/role-redirect.component';
+import { BodegaFormComponent } from './bodegas/bodega-form/bodega-form.component';
 
 const routes: Routes = [
 
@@ -36,10 +37,12 @@ const routes: Routes = [
       { path: 'usuarios/editar/:id', component: UsuarioFormComponent },
 
       // Propiedades
-      { path: 'propiedades', component: BodegasListComponent },
+      { path: 'bodegas', component: BodegasListComponent },
+      { path: 'bodegas/nuevo', component: BodegaFormComponent },
+      { path: 'bodegas/editar/:id', component: BodegaFormComponent },
 
       // Página default dentro del admin
-      { path: '', redirectTo: 'usuarios', pathMatch: 'full' }
+      { path: '', redirectTo: 'bodegas', pathMatch: 'full' }
     ]
   },
 

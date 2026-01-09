@@ -4,10 +4,11 @@ import { CarouselFeatureComponent } from './carousel-feature/carousel-feature.co
 import { MaterialModule } from '../shared/material/material.module';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { PersonaFormComponent } from './components/persona-form/persona-form.component';
-import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component'; // opcional, si usas botones mat-icon
+import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
+import { BodegaImagenesDialogComponent } from './components/bodega-imagenes-dialog/bodega-imagenes-dialog.component'; // opcional, si usas botones mat-icon
 
 @NgModule({
-  declarations: [CarouselFeatureComponent, LoginDialogComponent, PersonaFormComponent, AlertDialogComponent],
+  declarations: [CarouselFeatureComponent, LoginDialogComponent, PersonaFormComponent, AlertDialogComponent, BodegaImagenesDialogComponent],
   imports: [CommonModule, MaterialModule],
   exports: [CarouselFeatureComponent,PersonaFormComponent]
 })

@@ -1,38 +1,321 @@
-<h2 mat-dialog-title>{{ data ? 'Editar' : 'Nueva' }} bodega</h2>
+<form [formGroup]="form">
 
-<mat-dialog-content>
-  <form [formGroup]="form" class="grid">
+  <mat-accordion multi>
+
+    <!-- ================= GENERAL ================= -->
+    <mat-expansion-panel expanded>
+  <mat-expansion-panel-header>
+    <mat-panel-title>General</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div class="grid">
+
+    <!-- Alias -->
     <mat-form-field appearance="outline">
       <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre">
+      <input matInput formControlName="Alias">
     </mat-form-field>
 
+    <!-- Tipo de inmueble -->
     <mat-form-field appearance="outline">
-      <mat-label>Ubicación</mat-label>
-      <input matInput formControlName="ubicacion">
+      <mat-label>Tipo de inmueble</mat-label>
+      <mat-select formControlName="TipoInmueble">
+        <mat-option value="1">Terreno</mat-option>
+        <mat-option value="2">Bodega</mat-option>
+        <mat-option value="3">Nave industrial</mat-option>
+      </mat-select>
     </mat-form-field>
 
+    <!-- Operación -->
     <mat-form-field appearance="outline">
-      <mat-label>Superficie (m²)</mat-label>
-      <input type="number" matInput formControlName="superficieM2">
+      <mat-label>Operación</mat-label>
+      <mat-select formControlName="idOperacion">
+        <mat-option [value]="1">Renta</mat-option>
+        <mat-option [value]="2">Venta</mat-option>
+        <mat-option [value]="3">Ambas</mat-option>
+      </mat-select>
     </mat-form-field>
 
+    <!-- Precio -->
     <mat-form-field appearance="outline">
       <mat-label>Precio mensual (MXN)</mat-label>
-      <input type="number" matInput formControlName="precioMensual">
+      <input matInput type="number" formControlName="Precio">
     </mat-form-field>
 
+    <!-- Mantenimiento -->
     <mat-form-field appearance="outline">
-      <mat-label>Disponible</mat-label>
-      <select matNativeControl formControlName="disponible">
-        <option [value]="true">Sí</option>
-        <option [value]="false">No</option>
-      </select>
+      <mat-label>Mantenimiento</mat-label>
+      <input matInput type="number" formControlName="Costo_Mantenimiento">
     </mat-form-field>
-  </form>
-</mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="cancel()">Cancelar</button>
-  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">Guardar</button>
-</mat-dialog-actions>
+    <!-- Uso de suelo -->
+    <mat-form-field appearance="outline">
+      <mat-label>Uso de suelo</mat-label>
+      <mat-select formControlName="Uso_Suelo">
+        <mat-option value="1">Almacenamiento</mat-option>
+        <mat-option value="2">Producción ligera</mat-option>
+        <mat-option value="3">Comercial</mat-option>
+        <mat-option value="4">Industrial</mat-option>
+        <mat-option value="5">NA</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Estado físico -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado físico</mat-label>
+      <mat-select formControlName="Estado_Fisico">
+        <mat-option value="1">Nuevo</mat-option>
+        <mat-option value="2">Usado</mat-option>
+        <mat-option value="3">Remodelado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Descripción -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput rows="4" formControlName="Descripcion"></textarea>
+    </mat-form-field>
+
+  </div>
+</mat-expansion-panel>
+
+
+    <!-- ================= DIMENSIONES ================= -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Dimensiones</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="grid">
+
+        <mat-form-field appearance="outline">
+          <mat-label>M² Terreno</mat-label>
+          <input matInput type="number" formControlName="M2_Terreno">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>M² Construcción</mat-label>
+          <input matInput type="number" formControlName="M2_Construccion">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Frente</mat-label>
+          <input matInput type="number" formControlName="Frente">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fondo</mat-label>
+          <input matInput type="number" formControlName="Fondo">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Altura mínima</mat-label>
+          <input matInput type="number" formControlName="Altura_Min">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Altura máxima</mat-label>
+          <input matInput type="number" formControlName="Altura_Max">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Niveles</mat-label>
+          <input matInput type="number" formControlName="Niveles">
+        </mat-form-field>
+
+      </div>
+    </mat-expansion-panel>
+
+    <!-- ================= INFRAESTRUCTURA ================= -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Infraestructura</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="grid">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cajones de estacionamiento</mat-label>
+          <input matInput type="number" formControlName="Cajones_Estacionamiento">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Andenes</mat-label>
+          <input matInput type="number" formControlName="Andenes">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cortinas</mat-label>
+          <input matInput type="number" formControlName="Cortinas">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Rampas</mat-label>
+          <input matInput type="number" formControlName="Rampas">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Capacidad transformador (kVA)</mat-label>
+          <input matInput type="number" formControlName="Capacidad_Transformador">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Resistencia del piso</mat-label>
+          <input matInput type="number" formControlName="Resistencia">
+        </mat-form-field>
+
+      </div>
+    </mat-expansion-panel>
+
+    <!-- ================= SERVICIOS ================= -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Servicios</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="toggle-grid">
+
+        <mat-slide-toggle color="primary" formControlName="Agua">Agua</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Luz">Luz</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Gas">Gas</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Internet">Internet</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Alarma">Alarma</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Cisterna">Cisterna</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Iluminacion">Iluminación</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Extractores">Extractores</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Caseta_Vigilancia">Caseta de vigilancia</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Acceso_Plano">Acceso plano</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="Acceso_Rampa">Acceso con rampa</mat-slide-toggle>
+
+      </div>
+    </mat-expansion-panel>
+
+    <!-- ================= DIRECCIÓN ================= -->
+    <mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Dirección</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div class="grid" formGroupName="Direccion">
+
+    <!-- Código Postal -->
+    <mat-form-field appearance="outline">
+      <mat-label>Código Postal</mat-label>
+      <input
+        matInput
+        formControlName="c_CodigoPostal"
+        maxlength="5"
+        (keyup)="onCodigoPostalChange()">
+    </mat-form-field>
+
+    <!-- Estado (solo lectura) -->
+    <mat-form-field appearance="outline">
+  <mat-label>Estado</mat-label>
+  <input
+    matInput
+    formControlName="Estado"
+    readonly
+    class="readonly-field">
+</mat-form-field>
+
+<!-- Municipio (solo lectura, con contorno visible) -->
+<mat-form-field appearance="outline">
+  <mat-label>Municipio</mat-label>
+  <input
+    matInput
+    formControlName="Municipio"
+    readonly
+    class="readonly-field">
+</mat-form-field>
+
+    <!-- Colonia -->
+    <mat-form-field appearance="outline">
+      <mat-label>Colonia</mat-label>
+      <input matInput formControlName="Colonia">
+    </mat-form-field>
+
+    <!-- Calle -->
+    <mat-form-field appearance="outline">
+      <mat-label>Calle</mat-label>
+      <input matInput formControlName="Calle">
+    </mat-form-field>
+
+    <!-- No Exterior -->
+    <mat-form-field appearance="outline">
+      <mat-label>No. Exterior</mat-label>
+      <input matInput formControlName="NoExterior">
+    </mat-form-field>
+
+    <!-- No Interior -->
+    <mat-form-field appearance="outline">
+      <mat-label>No. Interior</mat-label>
+      <input matInput formControlName="NoInterior">
+    </mat-form-field>
+
+    <!-- Referencia -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Referencia</mat-label>
+      <input matInput formControlName="Referencia">
+    </mat-form-field>
+
+  </div>
+</mat-expansion-panel>
+
+<!-- ================= IMÁGENES ================= -->
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Imágenes de la bodega</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <!-- Botón para abrir modal -->
+  <div class="image-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="abrirModalImagenes()">
+      📤 Subir / Administrar imágenes
+    </button>
+  </div>
+
+  <!-- Carousel -->
+  <div class="carousel" *ngIf="imagenes.length > 0">
+    <button mat-icon-button (click)="prevImage()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <img [src]="imagenes[imagenActual]" class="carousel-image">
+
+    <button mat-icon-button (click)="nextImage()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <p *ngIf="imagenes.length === 0" class="hint">
+    No hay imágenes cargadas
+  </p>
+
+</mat-expansion-panel>
+
+  </mat-accordion>
+
+</form>
+<div class="form-actions">
+
+  <button
+    mat-stroked-button
+    color="warn"
+    type="button"
+    (click)="cancel()">
+    Cancelar
+  </button>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    [disabled]="form.invalid"
+    (click)="save()">
+    Guardar bodega
+  </button>
+
+</div>

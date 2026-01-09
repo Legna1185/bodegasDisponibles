@@ -7,14 +7,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent {
-constructor(private router: Router) {}
 
-  irUsuarios() {
-    this.router.navigate(['/app/usuarios']);
+  constructor(private router: Router) {}
+
+  irUsuarios(): void {
+    this.router.navigate(['/app/admin/usuarios']);
   }
 
-  irPropiedades() {
-    this.router.navigate(['/app/bodegas']);
+  irBodegas(): void {
+    this.router.navigate(['/app/admin/bodegas']);
   }
 }
- 
