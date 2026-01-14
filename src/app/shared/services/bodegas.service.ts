@@ -4,6 +4,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { HttpGenericService } from './http-generic.service';
 import { Bodega } from '../../core/models/bodega.model';
 import { AuthService } from './auth.service';
+import { BodegaListado } from '../models/bodega-listado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -81,4 +82,15 @@ export class BodegasService {
       this.getAuthHeaders()
     );
   }
+
+  
+
+getListado(): Observable<BodegaListado[]> {
+  return this.http.get<BodegaListado[]>(
+    '/bodegas/listado',
+    undefined,
+    this.getAuthHeaders()
+  );
+}
+
 }

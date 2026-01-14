@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BodegasService } from '../../../../core/services/bodegas.service';
+import { MatDialog } from '@angular/material/dialog';
+
+import { BodegasService } from '../../../../shared/services/bodegas.service';
 import { CodigoPostalService } from '../../../../shared/services/codigo-postal.service';
 import { CodigoPostalResponse } from '../../../../shared/models/codigo-postal-response.model';
-import { MatDialog } from '@angular/material/dialog';
 import { BodegaImagenesDialogComponent } from '../../../../shared/components/bodega-imagenes-dialog/bodega-imagenes-dialog.component';
-
 
 @Component({
   selector: 'app-bodega-form',
@@ -23,11 +23,7 @@ export class BodegaFormComponent implements OnInit {
   // =========================
   imagenes: string[] = [];
   imagenActual = 0;
-/*
-  imagenes = [
-  'https://via.placeholder.com/800x400?text=Bodega+1',
-  'https://via.placeholder.com/800x400?text=Bodega+2'
-];*/
+
   constructor(
     private fb: FormBuilder,
     private api: BodegasService,
@@ -54,7 +50,7 @@ export class BodegaFormComponent implements OnInit {
   private crearFormulario(): void {
     this.form = this.fb.group({
       Alias: [''],
-      TipoInmueble: ['Bodega'],
+      TipoInmueble: ['2'], // Bodega
       idOperacion: [1],
       idEstadoPropiedad: [1],
 
@@ -91,8 +87,8 @@ export class BodegaFormComponent implements OnInit {
       Acceso_Plano: [false],
       Acceso_Rampa: [false],
 
-      Uso_Suelo: ['Industrial'],
-      Estado_Fisico: [''],
+      Uso_Suelo: ['4'], // Industrial
+      Estado_Fisico: ['Nuevo'],
       Descripcion: [''],
 
       Direccion: this.fb.group({
@@ -168,10 +164,7 @@ export class BodegaFormComponent implements OnInit {
     const cp = direccionGroup.get('c_CodigoPostal')?.value;
 
     if (!cp || cp.length !== 5) {
-      direccionGroup.patchValue({
-        Estado: '',
-        Municipio: ''
-      });
+      direccionGroup.patchValue({ Estado: '', Municipio: '' });
       return;
     }
 
@@ -183,17 +176,11 @@ export class BodegaFormComponent implements OnInit {
             Municipio: res.data.Municipio
           });
         } else {
-          direccionGroup.patchValue({
-            Estado: '',
-            Municipio: ''
-          });
+          direccionGroup.patchValue({ Estado: '', Municipio: '' });
         }
       },
       error: () => {
-        direccionGroup.patchValue({
-          Estado: '',
-          Municipio: ''
-        });
+        direccionGroup.patchValue({ Estado: '', Municipio: '' });
       }
     });
   }
@@ -201,28 +188,6 @@ export class BodegaFormComponent implements OnInit {
   // =========================
   // IMÁGENES (DEMO)
   // =========================
-  onImagesSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
-
-    const files = Array.from(input.files);
-
-    if (this.imagenes.length + files.length > 5) {
-      alert('Máximo 5 imágenes por bodega');
-      return;
-    }
-
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagenes.push(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    });
-
-    input.value = '';
-  }
-
   nextImage(): void {
     if (this.imagenes.length === 0) return;
     this.imagenActual = (this.imagenActual + 1) % this.imagenes.length;
@@ -235,20 +200,19 @@ export class BodegaFormComponent implements OnInit {
   }
 
   abrirModalImagenes(): void {
-  const dialogRef = this.dialog.open(BodegaImagenesDialogComponent, {
-    width: '600px',
-    data: {
-      idBodega: this.idBodega,
-      imagenes: this.imagenes
-    }
-  });
+    const dialogRef = this.dialog.open(BodegaImagenesDialogComponent, {
+      width: '600px',
+      data: {
+        idBodega: this.idBodega,
+        imagenes: this.imagenes
+      }
+    });
 
-  dialogRef.afterClosed().subscribe((result: string[] | undefined) => {
-    if (result) {
-      this.imagenes = result;
-      this.imagenActual = 0;
-    }
-  });
-}
-
+    dialogRef.afterClosed().subscribe((result: string[] | undefined) => {
+      if (result) {
+        this.imagenes = result;
+        this.imagenActual = 0;
+      }
+    });
+  }
 }

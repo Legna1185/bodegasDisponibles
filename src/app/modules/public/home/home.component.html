@@ -58,25 +58,16 @@
     </button>
   </div>
    <div class="content">
-    <app-carousel-feature
-      [title]="'Bodega Norte'"
-      [images]="[
-        'https://picsum.photos/500/300?random=1',
-        'https://picsum.photos/500/300?random=2',
-        'https://picsum.photos/500/300?random=3'
-      ]"
-      [features]="['Ubicación céntrica', '1,200 m²', 'Seguridad 24h']">
-    </app-carousel-feature>
+    <ng-container *ngFor="let bodega of bodegas">
 
-    <app-carousel-feature
-      [title]="'Bodega Sur'"
-      [images]="[
-        'https://picsum.photos/500/300?random=4',
-        'https://picsum.photos/500/300?random=5',
-        'https://picsum.photos/500/300?random=6'
-      ]"
-      [features]="['Área de carga techada', 'Fácil acceso', 'Estacionamiento amplio']">
-    </app-carousel-feature>
+  <app-carousel-feature
+    [title]="bodega.nombre"
+    [images]="getImages(bodega)"
+    [features]="getFeatures(bodega)">
+  </app-carousel-feature>
+
+</ng-container>
+   
   </div>
 
 </div>

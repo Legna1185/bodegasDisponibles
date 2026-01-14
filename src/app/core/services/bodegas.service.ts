@@ -6,9 +6,7 @@ import { Observable, of } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class BodegasService {
 private data: Bodega[] = [
-{ id: 1, nombre: 'Bodega Norte', ubicacion: 'Monterrey, NL', superficieM2: 1200, precioMensual: 45000, disponible: true },
-{ id: 2, nombre: 'Bodega Centro', ubicacion: 'San Nicolás, NL', superficieM2: 800, precioMensual: 32000, disponible: false },
-{ id: 3, nombre: 'Bodega Sur', ubicacion: 'Guadalupe, NL', superficieM2: 1500, precioMensual: 60000, disponible: true }
+
 ];
 
 

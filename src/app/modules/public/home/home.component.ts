@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Filtro } from '../../../models/filtro';
+import { BodegasService } from '../../../shared/services/bodegas.service';
+import { BodegaListado } from '../../../shared/models/bodega-listado.model';
 
 @Component({
   selector: 'app-home',
@@ -7,11 +9,27 @@ import { Filtro } from '../../../models/filtro';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  // =========================
+  // Filtros (ya existentes)
+  // =========================
   filtros: Filtro[] = [];
-  filtrosSeleccionados: any = {}; // 🔹 Aquí guardaremos los valores seleccionados
-  mostrar: boolean = false; 
-  ngOnInit() {
-    // 🔹 Aquí podrías cargarlos de un servicio o archivo JSON externo
+  filtrosSeleccionados: any = {};
+  mostrar: boolean = false;
+
+  // =========================
+  // Bodegas (nuevo)
+  // =========================
+  bodegas: BodegaListado[] = [];
+  loading: boolean = false;
+
+  constructor(private bodegasService: BodegasService) {}
+
+  ngOnInit(): void {
+
+    // =========================
+    // Inicializar filtros
+    // =========================
     this.filtros = [
       {
         Title: 'Precio',
@@ -40,18 +58,44 @@ export class HomeComponent implements OnInit {
         ]
       }
     ];
+
+    // =========================
+    // Cargar bodegas
+    // =========================
+    this.cargarBodegas();
   }
 
-  applyFilters()
-  {
+  // =========================
+  // Obtener bodegas del API
+  // =========================
+  private cargarBodegas(): void {
+    this.loading = true;
+
+    this.bodegasService.getListado().subscribe({
+      next: (res) => {
+        this.bodegas = res;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error cargando bodegas', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  // =========================
+  // Aplicar filtros (demo)
+  // =========================
+  applyFilters(): void {
     console.log(this.getFiltrosSeleccionadosJSON());
-    alert("siempre confie en mi")
+    alert('Filtros aplicados (demo)');
   }
 
-  // 🔹 Método que se ejecuta al seleccionar un filtro
-  onFilterChange(filtro: Filtro, itemValue: string, event: any) {
+  // =========================
+  // Manejo de filtros
+  // =========================
+  onFilterChange(filtro: Filtro, itemValue: string, event: any): void {
     if (filtro.Tipo === 'checkbox') {
-      // Inicializa el array si no existe
       if (!this.filtrosSeleccionados[filtro.Title]) {
         this.filtrosSeleccionados[filtro.Title] = [];
       }
@@ -59,7 +103,6 @@ export class HomeComponent implements OnInit {
       if (event.target.checked) {
         this.filtrosSeleccionados[filtro.Title].push(itemValue);
       } else {
-        // Quitar el valor si se desmarca
         const index = this.filtrosSeleccionados[filtro.Title].indexOf(itemValue);
         if (index > -1) {
           this.filtrosSeleccionados[filtro.Title].splice(index, 1);
@@ -71,8 +114,23 @@ export class HomeComponent implements OnInit {
 
     console.log('JSON actual de filtros:', this.filtrosSeleccionados);
   }
-  // 🔹 Método para obtener el JSON final (por ejemplo, al presionar "Aplicar filtros")
-  getFiltrosSeleccionadosJSON() {
+
+  getFiltrosSeleccionadosJSON(): string {
     return JSON.stringify(this.filtrosSeleccionados, null, 2);
+  }
+
+  // =========================
+  // Helpers para el carousel
+  // =========================
+  getImages(bodega: BodegaListado): string[] {
+    return bodega.Imagenes?.map(img => img.Url) || [];
+  }
+
+  getFeatures(bodega: BodegaListado): string[] {
+    return [
+      `Operación: ${bodega.operacion}`,
+      `Precio: $${bodega.precio}`,
+      bodega.direccion
+    ];
   }
 }
